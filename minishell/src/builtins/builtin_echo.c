@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:09:03 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 00:00:03 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 16:54:51 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static int	check_new_line(char *str)
 	int	i;
 
 	i = 0;
-	if (str[i] && str[i] == '-')
+	if (str[i] && str[i] == '-' && str[i + 1] == 'n')
 	{
 		++i;
 		while (str[i] && str[i] == 'n')

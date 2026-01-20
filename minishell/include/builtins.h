@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:07:46 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 02:37:31 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 18:13:01 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int						ft_echo(char **args);
 int						ft_pwd(void);
 int						ft_cd(char **params, t_mlist **env);
 void					ft_exit(t_data *data, char **args);
+int						function_atoi(char *str);
 
 #endif

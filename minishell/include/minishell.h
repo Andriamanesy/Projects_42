@@ -15,7 +15,7 @@
 # include "../libft/includes/get_next_line.h"
 # include "../libft/includes/libft.h"
 # include "builtins.h"
-# include "debug.h"
+// # include "debug.h"
 # include "env.h"
 # include "executor.h"
 # include "expander.h"
@@ -34,6 +34,7 @@
 # include <sys/stat.h>
 // # include <sys/types.h>
 # include <sys/wait.h>
+# include <termios.h>
 
 # define INPUT 1
 # define HEREDOC 2
@@ -92,6 +93,7 @@ typedef struct s_data
 	int					exit_code;
 	int					pip[2];
 	bool				sq;
+	int					attr_error;
 }						t_data;
 
 void					init_data(t_data *data, int argc, char **argv);

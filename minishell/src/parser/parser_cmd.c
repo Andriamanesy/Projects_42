@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:11:20 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 02:28:58 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 16:58:26 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,13 @@ static int	add_to_cmd_param(char **cmd_param, int *i, char *str)
 	return (1);
 }
 
-static void	*free_cmd_param(char **cmd, int i)
+void	*free_cmd_param(char **cmd)
 {
-	while (--i != -1)
-		free(cmd[i]);
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+		free(cmd[i++]);
 	free(cmd);
 	return (NULL);
 }
@@ -64,14 +67,14 @@ char	**get_param(t_data *data, t_token *token)
 	if (tmp->type != PIPE && (tmp->type == CMD || (tmp->type == ARG
 				&& tmp->prev != data->token->prev && tmp->prev->type > 5))
 		&& !add_to_cmd_param(cmd_param, &i, tmp->str))
-		return (free_cmd_param(cmd_param, i));
+		return (free_cmd_param(cmd_param));
 	tmp = tmp->next;
 	while (tmp != data->token && tmp->type != PIPE)
 	{
 		if ((tmp->type == CMD || (tmp->type == ARG
 					&& tmp->prev != data->token->prev && tmp->prev->type > 5))
 			&& !add_to_cmd_param(cmd_param, &i, tmp->str))
-			return (free_cmd_param(cmd_param, i));
+			return (free_cmd_param(cmd_param));
 		tmp = tmp->next;
 	}
 	cmd_param[i] = NULL;

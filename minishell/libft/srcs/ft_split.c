@@ -10,53 +10,96 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/libft.h"
+#include "minishell.h"
 
-static int	ft_count_words(char const *str, char c);
-
-char	**ft_split(char const *str, char c)
+int	len_word(char *str)
 {
-	char	**new_tab;
-	size_t	len;
 	int		i;
+	char	quote;
 
-	new_tab = (char **)malloc((ft_count_words(str, c) + 1) * sizeof(char *));
-	if (!new_tab || !str)
-		return (NULL);
 	i = 0;
-	while (*str)
+	quote = 0;
+	while (is_space(str[i]))
+		i++;
+	while (str[i])
 	{
-		while (*str == c && *str)
-			str++;
-		if (*str)
+		if ((str[i] == 30 || str[i] == 31))
 		{
-			if (!ft_strchr(str, c))
-				len = ft_strlen(str);
-			else
-				len = ft_strchr(str, c) - str;
-			new_tab[i++] = ft_substr(str, 0, len);
-			str += len;
+			if (quote == 0)
+				quote = str[i];
+			else if (quote == str[i])
+				quote = 0;
 		}
+		else if (is_space(str[i]) && quote == 0)
+			break ;
+		i++;
 	}
-	new_tab[i] = NULL;
-	return (new_tab);
+	return (i);
 }
 
-static int	ft_count_words(char const *str, char c)
+static int	skip_quotes(char const *str, int i)
 {
-	int	count_wd;
+	char	quote;
 
-	if (!*str)
+	quote = str[i++];
+	while (str[i] && str[i] != quote)
+		i++;
+	if (str[i])
+		i++;
+	return (i);
+}
+
+int	ft_count_words(char const *str)
+{
+	int	i;
+	int	count;
+
+	if (!str)
 		return (0);
-	count_wd = 0;
-	while (*str)
+	i = 0;
+	count = 0;
+	while (str[i])
 	{
-		while (*str == c)
-			str++;
-		if (*str)
-			count_wd++;
-		while (*str != c && *str)
-			str++;
+		while (is_space(str[i]))
+			i++;
+		if (!str[i])
+			break ;
+		count++;
+		while (str[i] && !is_space(str[i]))
+		{
+			if (str[i] == 30 || str[i] == 31)
+				i = skip_quotes(str, i);
+			else
+				i++;
+		}
 	}
-	return (count_wd);
+	return (count);
+}
+
+char	**ft_split_quotes(char *s)
+{
+	char	**tab;
+	int		i;
+	int		len;
+
+	tab = malloc(sizeof(char *) * (ft_count_words(s) + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (*s)
+	{
+		while (is_space(*s))
+			s++;
+		if (*s)
+		{
+			len = len_word(s);
+			tab[i] = ft_substr(s, 0, len);
+			if (!tab[i])
+				return (NULL);
+			i++;
+			s += len;
+		}
+	}
+	tab[i] = NULL;
+	return (tab);
 }

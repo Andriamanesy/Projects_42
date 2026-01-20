@@ -13,7 +13,7 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-# include <stddef.h>
+// # include <stddef.h>
 
 typedef struct s_mlist	t_mlist;
 typedef struct s_data	t_data;
@@ -22,8 +22,6 @@ typedef struct s_token	t_token;
 int						free_list(t_mlist **list);
 int						append(t_mlist **list, char *elem);
 size_t					len_list(t_mlist *list);
-
-void					free_array(char **arr);
 int						print_error(char *str);
 void					free_all(t_data *data, char *err, int ext);
 int						print_error_token(t_token *token, t_data *data);

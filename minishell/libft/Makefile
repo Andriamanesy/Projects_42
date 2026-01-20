@@ -33,16 +33,13 @@ SRC_BONUS = srcs/ft_lstnew_bonus.c srcs/ft_lstadd_front_bonus.c srcs/ft_lstlast_
 OBJ = $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)/%.o)
 OBJ_BONUS = $(SRC_BONUS:$(SRC_DIR)%.c=$(OBJ_DIR)/%.o)
 
-COLOR_BoldCyan = \033[1;36m
-COLOR_Reset = \033[0m
-COLOR_Red = \033[31m
 
 all: $(NAME)
-	@echo "$(COLOR_BoldCyan)Building $(NAME)...$(COLOR_Reset)"
+	@echo "Building $(NAME)..."
 
 $(NAME): $(OBJ) $(OBJ_BONUS)
 	@$(AR) -rcs $@ $^
-	@echo "$(COLOR_BoldCyan)Library created: $(NAME)$(COLOR_Reset)"
+	@echo "Library created: $(NAME)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)

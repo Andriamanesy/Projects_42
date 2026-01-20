@@ -6,63 +6,11 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:11:25 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 01:22:21 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/17 13:50:06 by harramar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	fill_cmd(t_data *data, t_token *tmp)
-{
-	if (!get_infile(data, tmp, data->cmd->prev) && \
-		data->cmd->prev->infile == -1)
-		return (0);
-	if (data->cmd->prev->infile == -1)
-	{
-		data->cmd->prev->skip_cmd = true;
-		data->cmd->prev->outfile = -1;
-		return (1);
-	}
-	if (!get_outfile(tmp, data->cmd->prev, data) && data->cmd->prev->outfile \
-		!= -1)
-		return (0);
-	/*if (data->cmd->prev->outfile == -1)
-	{
-		if (data->cmd->prev->infile >= 0)
-			close (data->cmd->prev->infile);
-		data->cmd->prev->skip_cmd = true;
-		data->cmd->prev->infile = -1;
-		return (1);
-	}*/
-	if (!get_outfile(tmp, data->cmd->prev, data))
-	{
-		if (data->cmd->prev->outfile == -1)
-		{
-			if (data->cmd->prev->infile >= 0)
-				close (data->cmd->prev->infile);
-			data->cmd->prev->skip_cmd = true;
-			data->cmd->prev->infile = -1;
-			return (0);
-		}
-		return (0);
-	}
-	data->cmd->prev->cmd_param = get_param(data, tmp);
-	if (!data->cmd->prev->cmd_param)
-		free_all(data, ERR_MALLOC, EXT_MALLOC);
-	return (1);
-}
-
-static int	norm(t_data *data, t_token *tmp)
-{
-	if (!append_cmd(&data->cmd, -2, -2, NULL))
-		free_all(data, ERR_MALLOC, EXT_MALLOC);
-	if (!fill_cmd(data, tmp))
-	{
-		data->exit_code = 1;
-		return (0);
-	}
-	return (1);
-}
 
 int	create_list_cmd(t_data *data)
 {
@@ -84,30 +32,67 @@ int	create_list_cmd(t_data *data)
 	return (1);
 }
 
+int	expand_function(t_data *data)
+{
+	int		i;
+	t_cmd	*cmd;
+
+	i = 0;
+	cmd = data->cmd;
+	if (data->cmd->cmd_param[0] == NULL)
+		return (1);
+	while (data->cmd != cmd || i == 0)
+	{
+		i = 0;
+		while (data->cmd->cmd_param[i])
+		{
+			replace_dollar(&data->cmd->cmd_param[i], data, 0);
+			i++;
+		}
+		data->cmd = data->cmd->next;
+	}
+	return (1);
+}
+
+static int	parsing(t_data *data, char *line)
+{
+	if (check_open_quote(data, line) == 1)
+		return (free(line), 0);
+	if (!create_list_token(&data->token, line))
+	{
+		free (line);
+		free_all(data, ERR_MALLOC, EXT_MALLOC);
+	}
+	if (check_pipe(data) == 0)
+		return (0);
+	if (count_heredoc(data) > 16)
+	{
+		free (line);
+		free_all(data, "maximum here-document count exceeded\n", 2);
+	}
+	if (count_pipe(data) >= 3333)
+	{
+		ft_putstr_fd("syntax error near unexpected token `|'\n", 2);
+		data->exit_code = 2;
+		return (0);
+	}
+	free(line);
+	return (1);
+}
 
 int	parseline(t_data *data, char *line)
 {
-	if (open_quote(data, line))
-		return (free(line), 0);
-	if (!replace_dollar(&line, data) || !create_list_token(&data->token, line))
-	{
-		free(line);
-		free_all(data, ERR_MALLOC, EXT_MALLOC);
-	}
-	free(line);
-	// print_token(data->token);
-	if (data->token && data->token->prev->type == PIPE)
-	{
-		write(2, "Error: Unclosed pipe\n", 21);
-		data->exit_code = 2;
-		free_token(&data->token);
+	if (parsing(data, line) == 0)
 		return (0);
-	}
 	if (!data->token || !create_list_cmd(data))
 	{
 		free_token(&data->token);
-		free_cmd(&data->cmd);
-		return (0);
+		return (free_cmd(&data->cmd), 0);
 	}
-	return (check_pipe(data));
+	free_token(&data->token);
+	transform_quote(data);
+	expand_function(data);
+	data->cmd->cmd_param = function_split(data->cmd->cmd_param);
+	function_quote(data);
+	return (1);
 }

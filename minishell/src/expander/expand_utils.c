@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 07:47:36 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/29 11:42:22 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 16:57:03 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,10 @@ int	add_dollar(char *line, int *i, char **str, t_data *data)
 
 	(*i)++;
 	len_key = 0;
+	value = NULL;
 	value = get_dollar_value(&line[*i], &len_key, data);
 	if (!value)
-		tmp = ft_strjoin(*str, "");
+		tmp = ft_strdup(*str);
 	else
 	{
 		tmp = ft_strjoin(*str, value);

@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:09:16 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 02:37:31 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 16:55:11 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	export(char *str, t_mlist **env)
 	char	*value;
 
 	pos = exist(str, (*env));
+	if (pos >= 0 && !ft_strchr(str, '='))
+		return (1);
 	value = ft_strdup(str);
 	if (!value)
 		return (0);

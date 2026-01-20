@@ -6,7 +6,7 @@
 #    By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/11/18 15:12:07 by briandri          #+#    #+#              #
-#    Updated: 2025/12/29 11:40:20 by briandri         ###   ########.fr        #
+#    Updated: 2026/01/20 10:33:44 by briandri         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,14 +33,20 @@ SRC = \
 	$(SRC_DIR)/parser/parser_cmd.c \
 	$(SRC_DIR)/parser/parser_cmd_utils.c \
 	$(SRC_DIR)/parser/parse_redirs.c \
+	$(SRC_DIR)/parser/handel_utils.c \
+	$(SRC_DIR)/parser/utils_redir.c \
+	$(SRC_DIR)/parser/utils_quotes.c \
 	\
 	$(SRC_DIR)/expander/expander.c \
 	$(SRC_DIR)/expander/expand_utils.c \
 	$(SRC_DIR)/expander/here_doc.c \
+	$(SRC_DIR)/expander/utils_here_doc.c \
 	\
 	$(SRC_DIR)/executor/exec.c \
 	$(SRC_DIR)/executor/exec_utils.c \
 	$(SRC_DIR)/executor/other_exec_utils.c \
+	$(SRC_DIR)/executor/exec_utils_2.c \
+	$(SRC_DIR)/executor/exec_utils_3.c \
 	\
 	$(SRC_DIR)/builtins/builtin_cd.c \
 	$(SRC_DIR)/builtins/builtin.c \
@@ -49,6 +55,7 @@ SRC = \
 	$(SRC_DIR)/builtins/builtin_env.c \
 	$(SRC_DIR)/builtins/builtin_export.c \
 	$(SRC_DIR)/builtins/builtin_exit.c \
+	$(SRC_DIR)/builtins/utils_builtin.c \
 	\
 	$(SRC_DIR)/env/env_init.c \
 	$(SRC_DIR)/env/env_set.c \
@@ -62,23 +69,17 @@ SRC = \
 	$(SRC_DIR)/utils/list_utils.c\
 	$(SRC_DIR)/utils/str_utils.c\
 	\
-	$(SRC_DIR)/signals/signals.c\
-	$(SRC_DIR)/signals/signals_utils.c\
-	
+	$(SRC_DIR)/signals/signals.c
 
 OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-COLOR_BoldCyan = \033[1;36m
-COLOR_Reset    = \033[0m
-COLOR_Red      = \033[31m
-
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $@
-	@echo "$(COLOR_BoldCyan)Executable created: $(NAME)$(COLOR_Reset)"
+	@echo "Executable created: $(NAME)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
@@ -90,12 +91,12 @@ $(LIBFT):
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) clean
 	@rm -rf $(OBJ_DIR)
-	@echo "$(COLOR_Red)Object files cleaned.$(COLOR_Reset)"
+	@echo "Object files cleaned."
 
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@rm -f $(NAME)
-	@echo "$(COLOR_Red)Executable $(NAME) cleaned.$(COLOR_Reset)"
+	@echo "Executable $(NAME) cleaned."
 
 re: fclean all
 

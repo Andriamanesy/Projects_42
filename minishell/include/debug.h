@@ -16,7 +16,6 @@
 typedef struct s_token	t_token;
 typedef struct s_cmd	t_cmd;
 
-void					print_token(t_token *token);
 void					print_tab(char **tab);
 void					print_cmd(t_cmd *cmd);
 

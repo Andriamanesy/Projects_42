@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 07:47:23 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/29 11:41:15 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/17 15:22:34 by harramar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,30 @@ static int	should_expand(char next_char)
 	return (0);
 }
 
+static int	is_quote(char *str)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str && str[i])
+	{
+		if (str[i] == 30)
+			count++;
+		else if (str[i] == 31)
+			return (1);
+		i++;
+	}
+	if (count == 2)
+		return (0);
+	return (1);
+}
+
 static int	process_char(char **line, int *i, char **str, t_data *data)
 {
-	if ((*line)[*i] == '$' && !data->sq && should_expand((*line)[*i + 1]))
+	if (is_quote(*line) && (*line)[*i] == '$'
+		&& !data->sq && should_expand((*line)[*i + 1]))
 	{
 		if (!add_dollar((*line), i, str, data))
 			return (0);
@@ -36,7 +57,7 @@ static int	process_char(char **line, int *i, char **str, t_data *data)
 	return (1);
 }
 
-int	replace_dollar(char **line, t_data *data)
+int	replace_dollar(char **line, t_data *data, int redir)
 {
 	char	*str;
 	bool	dq;
@@ -50,11 +71,11 @@ int	replace_dollar(char **line, t_data *data)
 		return (0);
 	while ((*line)[i])
 	{
-		quoting_choice(&dq, &data->sq, NULL, (*line)[i]);
 		if (!process_char(line, &i, &str, data))
 			return (0);
 	}
-	free(*line);
+	if (redir == 0)
+		free(*line);
 	*line = str;
 	return (1);
 }

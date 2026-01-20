@@ -6,7 +6,7 @@
 /*   By: briandri <briandri@student.42antananarivo. +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 15:10:33 by briandri          #+#    #+#             */
-/*   Updated: 2025/12/24 02:37:31 by briandri         ###   ########.fr       */
+/*   Updated: 2026/01/11 16:56:14 by briandri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,23 +26,6 @@ void	absolute_path(char **path, char *cmd, t_data *data)
 	}
 }
 
-int	ft_strslashjoin(char *dest, char *str, char *env, int *index)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (*index < (PATH_MAX - 1) && env[(*index)] && env[(*index)] != ':')
-		dest[i++] = env[(*index)++];
-	++(*index);
-	dest[i++] = '/';
-	j = 0;
-	while (j < (PATH_MAX - 1) && str[j])
-		dest[i++] = str[j++];
-	dest[i] = '\0';
-	return (0);
-}
-
 char	*create_paths(t_mlist *env, int len)
 {
 	t_mlist	*tmp;
@@ -57,10 +40,62 @@ char	*create_paths(t_mlist *env, int len)
 	return (NULL);
 }
 
+static int	ft_count(char const *str, char c)
+{
+	int	i;
+	int	count;
+
+	count = 0;
+	i = 0;
+	while (str[i] != '\0')
+	{
+		while (str[i] == c)
+		{
+			i++;
+		}
+		if (str[i])
+		{
+			while (str[i] && str[i] != c)
+				i++;
+			count++;
+		}
+	}
+	return (count);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**str;
+	int		i;
+	int		j;
+	int		len;
+
+	str = (char **)malloc(sizeof(char *) * (ft_count(s, c) + 1));
+	if (str == NULL)
+		return (NULL);
+	j = 0;
+	i = 0;
+	len = 0;
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		len = i;
+		while (s[i] != '\0' && s[i] != c)
+			i++;
+		if (len < i)
+			str[j++] = ft_substr(s, len, (i - len));
+	}
+	str[j] = NULL;
+	return (str);
+}
+
 char	*find_cmd(t_data *data, char *cmd, t_mlist *env)
 {
 	char	*paths;
-	char	path[PATH_MAX];
+	char	*path;
+	char	*tmp;
+	char	**split;
 	int		i;
 
 	(void)data;
@@ -68,11 +103,17 @@ char	*find_cmd(t_data *data, char *cmd, t_mlist *env)
 	if (!paths)
 		return (NULL);
 	i = 0;
-	while (paths[i])
+	split = ft_split(paths, ':');
+	while (split[i])
 	{
-		ft_strslashjoin(path, cmd, paths, &i);
+		tmp = ft_strjoin(split[i], "/");
+		path = ft_strjoin(tmp, cmd);
+		free(tmp);
 		if (access(path, F_OK) == 0)
-			return (ft_strdup(path));
+			return (free_cmd_param(split), path);
+		free(path);
+		i++;
 	}
+	free_cmd_param(split);
 	return (NULL);
 }
