@@ -1,0 +1,116 @@
+C'est une question classique, mais je vais être honnête avec toi : en programmation, ce n'est pas tant le nombre d'exercices qui compte, mais leur complexité croissante et la diversité des problèmes que tu résous.
+
+On ne "finit" jamais vraiment d'apprendre le C++, mais pour atteindre un niveau où tu es autonome et capable de postuler à un job ou de créer tes propres logiciels, voici un découpage réaliste :
+
+Le "Parcours du Combattant" (Environ 50 à 70 exercices)
+Pour vraiment maîtriser le langage, tu devrais viser ce volume réparti de la manière suivante :
+
+Les Bases (15-20 exercices) :
+
+Calculs simples, manipulations de chaînes de caractères, boucles for/while.
+
+Objectif : Automatiser la syntaxe.
+
+La Logique et les Fonctions (10-15 exercices) :
+
+Passage d'arguments par référence, récursivité simple, tris de tableaux.
+
+Objectif : Comprendre comment les données circulent.
+
+La POO - Le gros morceau (15-20 exercices) :
+
+Créer des classes (ex: une classe Rectangle, puis une classe Banque).
+
+Pratiquer l'héritage (ex: une classe Animal dont dérivent Chien et Chat).
+
+Le polymorphisme et les fonctions virtuelles.
+
+La Gestion Mémoire (5-10 exercices) :
+
+Manipulation de pointeurs, allocation dynamique, et surtout les Smart Pointers.
+
+Objectif : Éviter les fuites de mémoire.
+
+
+La règle d'or : Les 3 Projets Piliers
+Au-delà des petits exercices isolés, la maîtrise vient quand tu relies tout ensemble. Je te conseille de réaliser 3 projets concrets :
+
+Projet 1 (Console) : Un gestionnaire de répertoire ou un petit jeu de rôle (RPG) textuel. (Utilise la POO).
+
+Projet 2 (Algorithmie) : Un solveur de Sudoku ou un algorithme de tri visualisé. (Utilise les vecteurs et la logique).
+
+Projet 3 (Avancé) : Une application avec une petite interface graphique (via la bibliothèque SFML ou Qt) comme un mini-jeu ou un éditeur de texte.
+
+
+
+
+
+
+
+
+
+C'est parti pour la **Phase 2**. On va monter d'un cran : ici, l'important n'est plus seulement que le code "marche", mais qu'il soit **propre, découpé et efficace**.
+
+Voici ta liste de **15 exercices** pour maîtriser la circulation des données.
+
+---
+
+### 🟢 Les Fondamentaux des Fonctions (1-5)
+
+1. **Le Cube :** Crée une fonction `double cube(double n)` qui retourne le cube d'un nombre.
+2. **Affichage décoré :** Crée une fonction `void afficherTitre(string titre)` qui affiche le texte entouré d'une bordure d'étoiles proportionnelle à sa taille.
+3. **Calcul de puissance :** Crée une fonction `long puissance(int base, int exp)` sans utiliser `<cmath>`.
+4. **Conversion Heures :** Une fonction qui reçoit un nombre total de secondes et "retourne" (via des références) le nombre d'heures, minutes et secondes correspondantes.
+5. **Surcharge (Overloading) :** Crée deux fonctions `calculerAire`. L'une prend le rayon (cercle), l'autre prend largeur et hauteur (rectangle).
+
+### 🟡 Le Passage par Référence & Sécurité (6-10)
+
+6. **Le Swap :** `void echanger(int &a, int &b)`. Inverser deux entiers. C'est l'exercice de base pour comprendre le `&`.
+7. **Le Min et le Max :** Crée une fonction qui prend un `std::vector<int>` et renvoie **à la fois** le min et le max en utilisant des références pour les résultats.
+8. **Normalisation :** Une fonction qui prend une string par référence et la transforme entièrement en majuscules (modifie l'originale).
+9. **Validation d'entrée :** Une fonction `void demanderNote(int &note)` qui redemande une note à l'utilisateur tant qu'elle n'est pas entre 0 et 20.
+10. **Référence constante :** Crée une fonction qui affiche une très longue chaîne de caractères. Utilise `const string&` pour éviter la copie inutile tout en protégeant la donnée.
+
+### 🔴 Algorithmes, Tableaux & Récursivité (11-15)
+
+11. **Somme de Tableau :** Une fonction qui calcule la somme des éléments d'un `std::vector`.
+12. **Recherche Linéaire :** Une fonction qui retourne l'index d'un nombre dans un tableau, ou -1 s'il n'y est pas.
+13. **Tri à bulles (Bubble Sort) :** Écris une fonction `void trierTableau(vector<int> &v)` qui trie les nombres du plus petit au plus grand.
+14. **Récursivité 1 (Factorielle) :** Calcule  avec une fonction qui s'appelle elle-même.
+15. **Récursivité 2 (Fibonacci) :** Crée une fonction récursive qui donne le n-ième nombre de la suite de Fibonacci.
+
+---
+
+### 💡 Le concept clé : `std::vector`
+
+Pour les exercices 7, 11, 12 et 13, je te conseille d'utiliser `std::vector<int>` plutôt que les tableaux classiques.
+
+**Petit cours rapide sur le Vector :**
+
+* **Inclusion :** `#include <vector>`
+* **Déclaration :** `vector<int> monTableau = {1, 2, 3};`
+* **Ajouter :** `monTableau.push_back(4);`
+* **Taille :** `monTableau.size();`
+
+---
+
+### Ton plan d'attaque
+
+Comme tu as déjà ton système de dossiers (`ex00`, `ex01`...), je te suggère de continuer ainsi dans un nouveau dossier parent `Logique_Fonctions`.
+
+**Par quel exercice veux-tu commencer ?** Si tu veux, on peut regarder ensemble l'exercice **6 (Le Swap)**, car c'est là que tu vas vraiment comprendre la différence entre "copier une valeur" et "donner l'accès à la case mémoire".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

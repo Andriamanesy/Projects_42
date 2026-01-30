@@ -1,0 +1,131 @@
+## 0. La Classe et l'Objet : Le Plan et la Maison
+
+Avant d'entrer dans les détails, il faut comprendre la différence entre une **Classe** et un **Objet** (aussi appelé **Instance**).
+
+* **La Classe** : C'est un modèle, un moule ou un **plan d'architecte**. Elle définit quelles seront les caractéristiques (attributs) et les capacités (méthodes) de quelque chose, mais elle n'existe pas physiquement en mémoire.
+* **L'Objet** : C'est la réalisation concrète du plan. C'est la **maison construite** à partir du plan. On peut construire 10 maisons (objets) différentes à partir d'un seul plan (classe), chacune avec sa propre adresse et sa propre couleur.
+
+### Ce qu'on trouve dans une classe :
+
+1. **Les Attributs (Données)** : Ce que l'objet **est** ou **a** (ex: `_name`, `_age`, `_color`). En C++, on les appelle souvent des *données membres*.
+2. **Les Méthodes (Actions)** : Ce que l'objet peut **faire** (ex: `get_name()`, `shout()`, `save_to_file()`). En C++, ce sont des *fonctions membres*.
+3. **Le Constructeur** : Une méthode spéciale appelée automatiquement lors de la "naissance" de l'objet pour initialiser ses attributs.
+4. **Le Destructeur** : Une méthode spéciale appelée lors de la "mort" de l'objet pour nettoyer la mémoire.
+
+> **En résumé** : Si la Classe est une recette de cuisine, l'Objet est le gâteau que tu as réellement préparé et que tu peux manger.
+
+---
+
+### Pourquoi est-ce important ?
+
+Grâce à la classe, tu peux créer des types de données personnalisés. `int` ou `double` sont des types de base fournis par le langage, mais `Someone` ou `Windows` sont des types que **tu** as inventés pour répondre aux besoins spécifiques de ton programme.
+
+**Est-ce que cette distinction entre le "plan" (Classe) et la "réalité" (Objet) te semble claire ?**
+
+
+## 1. La Classe et l'Encapsulation
+
+L'**Encapsulation**, c'est l'art de mettre des données dans une boîte et de décider qui a le droit de les toucher.
+
+* **`public`** : Tout le monde y a accès. C'est l'interface de ton objet.
+* **`private`** : Seul l'objet lui-même peut voir ces données. C'est la règle d'or : **tes attributs doivent presque toujours être privés.**
+* **`protected`** : Comme privé, mais les classes enfants (Héritage) y ont aussi accès.
+
+---
+
+## 2. L'Héritage
+
+L'**Héritage** permet de créer une nouvelle classe à partir d'une classe existante. On récupère les caractéristiques du parent et on en ajoute de nouvelles.
+
+* **Syntaxe** : `class Chien : public Animal`.
+* **Important** : En C++, l'héritage doit être `public` dans 99% des cas pour que le polymorphisme fonctionne.
+
+---
+
+## 3. Le Polymorphisme et les Méthodes Virtuelles
+
+C'est la capacité d'un pointeur de type "Parent" à appeler la bonne méthode de l'objet "Enfant".
+
+* **`virtual`** : Indique que la méthode peut être redéfinie.
+* **`override`** : (C++11) Indique explicitement que tu redéfinis une méthode du parent. C'est une sécurité contre les fautes de frappe.
+* **Destructeur Virtuel** : **Obligatoire** dès que tu as une méthode virtuelle, pour éviter les fuites de mémoire lors du `delete`.
+
+---
+
+## 4. Abstraction et Classes Abstraites
+
+Une classe est **abstraite** si elle contient au moins une **fonction virtuelle pure**.
+
+* **Fonction virtuelle pure** : `virtual void breathe() = 0;`.
+* Une classe abstraite **ne peut pas être instanciée** (tu ne peux pas faire `new Animal()`). Elle sert de moule pour les autres.
+* **Interface** : En C++, on appelle "interface" une classe qui n'a *que* des fonctions virtuelles pures et aucun attribut.
+
+---
+
+## 5. La Surcharge (Overloading)
+
+Il existe deux types de surcharge :
+
+1. **Surcharge de fonctions** : Plusieurs fonctions avec le même nom mais des paramètres différents.
+```cpp
+void print(int i);
+void print(std::string s);
+
+```
+
+
+2. **Surcharge d'opérateurs** : Permet de définir comment l'objet réagit aux symboles comme `+`, `-`, `<<` ou `==`.
+```cpp
+Vector operator+(const Vector& other);
+
+```
+
+
+
+---
+
+## 6. Composition vs Héritage
+
+C'est un concept crucial d'architecture.
+
+* **Héritage (Est un)** : Un `Chien` *est un* `Animal`.
+* **Composition (A un)** : Une `Voiture` *a un* `Moteur`.
+
+**Règle d'or** : Préfère souvent la **composition** à l'héritage. C'est plus flexible et cela évite de créer des hiérarchies de classes trop complexes et rigides.
+
+---
+
+## 7. Les Concepts Avancés (Le "Plus" C++)
+
+### La Liste d'Initialisation
+
+Utilise toujours la liste d'initialisation dans tes constructeurs. C'est plus performant et parfois obligatoire (pour les membres `const` ou les références).
+`MonObjet() : _valeur(10), _nom("Tuto") {}`
+
+### RAII (Resource Acquisition Is Initialization)
+
+C'est le concept le plus important en C++. La gestion de la ressource (mémoire, fichier, mutex) est liée à la durée de vie de l'objet.
+
+* **Constructeur** : On prend la ressource.
+* **Destructeur** : On rend la ressource.
+Cela garantit qu'il n'y a jamais de fuite, même en cas d'erreur.
+
+### Copie et Déplacement (Rule of 3 / Rule of 5)
+
+Si ta classe gère de la mémoire manuelle (pointeurs), tu dois définir :
+
+1. Le Destructeur.
+2. Le Constructeur de copie.
+3. L'opérateur d'affectation par copie.
+*(Et depuis C++11, le Déplacement pour la performance).*
+
+---
+
+## Résumé pour ton code
+
+Pour ta classe `Someone`, tu as appliqué :
+
+1. **Abstraction** (classe abstraite via `= 0`).
+2. **Encapsulation** (`protected`, `private`, getters).
+3. **Héritage** (`class English : public Someone`).
+4. **Polymorphisme** (`virtual` et `override`).
